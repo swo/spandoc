@@ -26,15 +26,31 @@ class TestNameOutput:
 
 class TestOKWriteFile:
     @pytest.mark.skip(reason="Can't interact with user")
-    def test_correct(self):
+    def test_correct(self, monkeypatch):
+        monkeypatch.setattr(__builtins__, 'input', lambda x: 'y')
+        assert input('foo') == 'y'
         # I don't know a way to have a test that requires user interaction
         # Test three conditions:
         #  - True if the file doesn't exist
         #  - True if the file exists and the user enters 'Y' or 'y'
         #  - False if the file exists and the user enters something else
-        pass
 
-# import select, argparse, os.path, os, sys, glob, subprocess, re, tempfile
+
+class TestPandocCommand:
+    def test_bare(self):
+        assert pandoc_command('in.md', 'docx') == ['pandoc', '--to', 'docx', 'in.md']
+
+    def test_output(self):
+        assert pandoc_command('in.md', 'docx', output_fn='out.docx') == ['pandoc', '--to', 'docx', '--output', 'out.docx', 'in.md']
+
+    def test_filters(self):
+        assert pandoc_command('in.md', 'docx', filters=['filter1.hs', 'filter2.hs']) == ['pandoc', '--to', 'docx', '--filter', 'filter1.hs', 'filter2.hs', '--', 'in.md']
+
+    def test_variables(self):
+        assert pandoc_command('in.md', 'docx', variables=['papersize=A4', 'toc']) == ['pandoc', '--to', 'docx', '-V', 'papersize=A4', 'toc', '--', 'in.md']
+
+    def test_multiple(self):
+        assert pandoc_command('in.md', 'docx', output_fn='out.docx', filters=['filter1.hs', 'filter2.hs'], variables=['papersize=A4', 'toc']) == ['pandoc', '--to', 'docx', '--output', 'out.docx', '--filter', 'filter1.hs', 'filter2.hs', '-V', 'papersize=A4', 'toc', '--', 'in.md']
 
 # def tablify(lines):
 #     fields = [l.split('\t') for l in lines]
@@ -82,18 +98,3 @@ class TestOKWriteFile:
 #         with open(fn) as f:
 #             return (f.readlines(), fn)
 
-# def pandoc_command(input_fn, pandoc_to, output_fn=None, filters=None, variables=None):
-#     command = ['pandoc', '--to', pandoc_to]
-
-#     if output_fn is not None:
-#         command += ['--output', output_fn]
-
-#     if filters is not None:
-#         command += ['--filter'] + filters
-
-#     if variables is not None:
-#         command += ['-V'] + variables
-
-#     command += [input_fn]
-
-#     return command

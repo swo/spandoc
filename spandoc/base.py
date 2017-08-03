@@ -74,15 +74,21 @@ def interpret_to(to):
 
 def pandoc_command(input_fn, pandoc_to, output_fn=None, filters=None, variables=None):
     command = ['pandoc', '--to', pandoc_to]
+    need_doubledash = False
 
     if output_fn is not None:
         command += ['--output', output_fn]
 
     if filters is not None:
         command += ['--filter'] + filters
+        need_doubledash = True
 
     if variables is not None:
         command += ['-V'] + variables
+        need_doubledash = True
+
+    if need_doubledash:
+        command += ['--']
 
     command += [input_fn]
 

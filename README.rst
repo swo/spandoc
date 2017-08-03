@@ -8,3 +8,5 @@ Get started
 
 To do
 -----
+
+- Add a `--watch` option using Watchdog
