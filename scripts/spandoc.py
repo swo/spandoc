@@ -4,6 +4,7 @@
 
 #from spandoc.base import *
 import smart_pandoc.base as sd
+import smart_pandoc.watch
 import argparse, tempfile, subprocess, os, sys
 
 if __name__ == '__main__':
@@ -14,7 +15,11 @@ if __name__ == '__main__':
     p.add_argument('--verbose', '-v', action='store_true', help='print pandoc command?')
     p.add_argument('--filters', nargs='*', default=['pandoc-citeproc'], help='pandoc filters (default: only citeproc)')
     p.add_argument('--variables', nargs='*')
+    p.add_argument('--watch', '-w', action='store_true', help='continually run pandoc?')
     args = p.parse_args()
+
+    if args.watch and args.input is None:
+        raise RuntimeError('watch mode requires a file to watch')
 
     # figure out pandoc "to" type based on the extension
     pandoc_to, output_ext = sd.interpret_to(args.to)

@@ -1,6 +1,6 @@
 # author: scott olesen <swo@alum.mit.edu>
 
-import select, argparse, os.path, os, sys, glob, subprocess, re, tempfile
+import select, argparse, os.path, os, sys, glob, re
 
 def tablify(lines):
     fields = [l.split('\t') for l in lines]
