@@ -101,7 +101,7 @@ def ok_write_file(fn):
     '''
 
     if os.path.isfile(fn):
-        resp = input("file '{}' already exists. overwite? [y/N] ".format(output_fn))
+        resp = input("file '{}' already exists. overwite? [y/N] ".format(fn))
         return resp.lower() in ['y', 'yes']
     else:
         return True

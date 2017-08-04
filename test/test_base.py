@@ -1,6 +1,6 @@
 # author: scott olesen <swo@alum.mit.edu>
 
-from spandoc.base import *
+from smart_pandoc.base import *
 import pytest
 
 class TestInterpetTo:

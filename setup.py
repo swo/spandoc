@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
     name='Spandoc',
     version='0.1',
-    url='url',
+    url='https://github.com/swo/spandoc',
     license='MIT',
     author='Scott Olesen',
     author_email='swo@alum.mit.edu',
@@ -14,6 +14,6 @@ setup(
         ],
     description='Smarter Pandoc',
     long_description='Guess file inputs and outputs for pandoc',
-    packages=['spandoc'],
+    packages=['smart_pandoc'],
     scripts=['scripts/spandoc.py']
 )

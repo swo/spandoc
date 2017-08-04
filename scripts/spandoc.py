@@ -2,7 +2,9 @@
 #
 # author: scott olesen <swo@alum.mit.edu>
 
-from pandoc.base import *
+#from spandoc.base import *
+import smart_pandoc.base as sd
+import argparse, tempfile, subprocess, os, sys
 
 if __name__ == '__main__':
     p = argparse.ArgumentParser(description="'smart' pandoc: a wrapper with some intelligent defaults")
@@ -15,15 +17,15 @@ if __name__ == '__main__':
     args = p.parse_args()
 
     # figure out pandoc "to" type based on the extension
-    pandoc_to, output_ext = interpret_to(args.to)
+    pandoc_to, output_ext = sd.interpret_to(args.to)
 
     # figure out the input/output mode: stream or file
     # input_fn = None implies streaming mode
-    input_lines, input_fn = find_input(args.input)
+    input_lines, input_fn = sd.find_input(args.input)
 
     # write interpolated lines to a temporary file
     tempf = tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False)
-    for line in interpolate_tables(input_lines):
+    for line in sd.interpolate_tables(input_lines):
         print(line.rstrip(), file=tempf)
 
     tempf.close()
@@ -35,16 +37,16 @@ if __name__ == '__main__':
         output_fn = None
     else:
         # guess the output name
-        output_fn = name_output(input_fn, output_ext)
+        output_fn = sd.name_output(input_fn, output_ext)
 
         # check that this is not used
-        if not (args.force or ok_write_file(output_fn)):
+        if not (args.force or sd.ok_write_file(output_fn)):
             print('not overwriting')
             sys.exit(0)
 
     # build the system command to run pandoc
     # (we always read from the temporary file)
-    command = pandoc_command(tempf.name, pandoc_to, output_fn, args.filters, args.variables)
+    command = sd.pandoc_command(tempf.name, pandoc_to, output_fn, args.filters, args.variables)
 
     if args.verbose:
         print('tempfile:', tempf.name)
