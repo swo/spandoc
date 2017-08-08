@@ -1,6 +1,6 @@
-import watchdog, os.path, subprocess, sys
+import watchdog.events, os.path, subprocess, sys
 
-class SpandocHandler(watchdog.FileSystemEventHandler):
+class SpandocHandler(watchdog.events.FileSystemEventHandler):
     def __init__(self, fn, command):
         '''
         fn : str
